@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-bairros_atendidos = ['bom retiro', 'butantã']
+bairros_atendidos = ['bom retiro', 'butantã', 'barra funda']
 
 
 @app.route("/")
