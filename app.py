@@ -28,6 +28,24 @@ def new_route(cep):
     return f'Atendemos no bairro {bairro}'
 
 
-@app.route("/not-found")
-def not_found():
-    return "Página não encontrada", 404
+@app.route("/listar")
+def lista_bairros():
+    return bairros_atendidos
+
+
+@app.route("/adicionar/<novo_bairro>")
+def add_bairro(novo_bairro):
+    bairros_atendidos.append(novo_bairro.lower())
+    return 'ok'
+
+
+@app.route("/remover/<bairro>")
+def remove_bairro(bairro):
+    try:
+        bairros_atendidos.remove(bairro.lower())
+    except ValueError:
+        return 'bairro não encontrado'
+    except Exception:
+        return 'erro desconhecido'
+    else:
+        return 'ok'
