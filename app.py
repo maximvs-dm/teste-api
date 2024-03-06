@@ -42,8 +42,8 @@ def remove_bairro(bairro):
     try:
         bairros_atendidos.remove(bairro.lower())
     except ValueError:
-        return 'bairro não encontrado'
+        return 'bairro não encontrado', 404
     except Exception:
-        return 'erro desconhecido'
+        return 'erro desconhecido', 400
     else:
         return 'ok'
