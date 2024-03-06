@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from errors import BairroNotFoundError
 from request_helper import get_bairro
 
@@ -31,10 +31,30 @@ def lista_bairros():
     return bairros_atendidos
 
 
-@app.route("/adicionar/<novo_bairro>")
-def add_bairro(novo_bairro):
-    bairros_atendidos.append(novo_bairro.lower())
+@app.route("/adicionar/<novo_bairro>", methods=['GET'])
+def get_add_bairro(novo_bairro):
+    print('chamando o get')
+
     return 'ok'
+    bairros_atendidos.append(novo_bairro.lower())
+
+
+@app.route("/adicionar", methods=['POST'])
+def post_add_bairro():
+    print('chamando o post', request.json)
+
+    cep = request.json.get('cep')
+    if cep is None:
+        return 'Cep não enviado', 400
+
+    try:
+        bairro = get_bairro(cep)
+    except BairroNotFoundError:
+        return 'Bairro não encontrado', 404
+
+    if bairro.lower() not in bairros_atendidos:
+        bairros_atendidos.append(bairro.lower())
+    return 'Bairro adicionado'
 
 
 @app.route("/remover/<bairro>")
