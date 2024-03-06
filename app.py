@@ -1,5 +1,6 @@
 from flask import Flask
-import requests
+from errors import BairroNotFoundError
+from request_helper import get_bairro
 
 app = Flask(__name__)
 
@@ -11,15 +12,12 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-@app.route("/meu-bairro/<cep>")
+@app.route("/atende/<cep>")
 def new_route(cep):
-    print(f'O CEP digitado foi: {cep}')
-    url = f'https://viacep.com.br/ws/{cep}/json/'
-    resp = requests.get(url)
-    resp_dict = resp.json()
-    bairro = resp_dict.get('bairro')
-
-    if bairro is None:
+    try:
+        bairro = get_bairro(cep)
+    except BairroNotFoundError as e:
+        print(e)
         return "Bairro não encontrado", 404
 
     if bairro.lower() not in bairros_atendidos:
