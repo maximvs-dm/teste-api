@@ -23,7 +23,7 @@ def new_route(cep):
     if bairro.lower() not in bairros_atendidos:
         return f"Bairro {bairro} não atendido"
 
-    return f'Atendemos no bairro {bairro}'
+    return f'Atendemos no bairro {bairro}', 200
 
 
 @app.route("/listar")
